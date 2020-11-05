@@ -1,0 +1,1 @@
+%~dp0\psychopy_installation\python.exe %~dp0\psychopy_experiments\main_script.py
