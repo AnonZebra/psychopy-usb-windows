@@ -21,6 +21,9 @@ How it works
 -----------------
 Take a look in 'run_experiments.bat'. '%~dp0' is kind of like an environment variable, and is converted to the directory of where the .bat file is located once you run the file. With this hack, we're able to create a relative path. This means you don't have to worry about the USB drive being named "F:", "G:" or whatever else when you plug it into a computer. All the .bat file says is that the PsychoPy installation's python executable should launch Python and make it run the scripts 'psychopy_experiments\experiment1\exp1.py' and 'psychopy_experiments\experiment2\exp2.py', one after the other.
 
+
+Running your own experiments
+-----------------
 In order to run your own experiments, you need to copy their directories over to the 'psychopy_experiments' folder. Say you have a Stroop task experiment, with stroop.psyexp and stroop.py files saved in a directory 'stroop_exp'. Copy the whole **directory** over to 'psychopy_experiments'. Then, open up the 'run_experiments.bat' file and add the following.
 
 .. code-block:: rst
@@ -33,7 +36,41 @@ Remember that you need to generate a new .py file if you're using PsychoPy build
 
 Note that if you want to run multiple experiments back-to-back, you use the method above to add more lines to the 'run_experiments.bat' file. If you want more control you can create one copy of the .bat file for each experiment, each with a single line for making Python run an experiment.
 
+Including monitor specifications in your experiments
+-----------------
+In PsychoPy Builder, the default is to rely on the 'Monitor Center' for storing and loading monitor settings. These settings are saved in a hidden folder on your computer (usually inside of your user's home folder), which is outside of PsychoPy's own directory. This isn't a reliable solution when running experiments on a USB stick. To circumvent this issue, do the following:
+
+1. In your experiment's first routine, add a code component
+2. Open up the code component's 'Before Experiment' tab
+3. Add the following code snippet
+```py
+# import psychopy module for generating
+# monitor instances.
+from psychopy import monitors
+
+# create monitor instance for use with
+# USB stick experiment
+example_mon = monitors.Monitor(
+    name='example_monitor',
+    width=49,
+    distance=60,
+    notes='Example monitor, replace specifications here.')
+
+# set pixel size (width x height) of monitor
+example_mon.setSizePix([1280, 1024])
+```
+4. Edit the configurations in the snippet in accordance with the monitor of the computer that you will run the experiment on
+5. Save the code component's contents
+6. Open up your experiment's settings and go to the 'Screen' tab
+7. In the 'monitor' field, insert '$example_mon', i. e. a '$' and then whatever you named your monitor instance in the code snippet above
+8. Use the Builder's 'compile to script' command.
+
+Now the resulting .py experiment script should include your monitor specifications, meaning that the experiment doesn't rely on the Monitor Center. When running the experiment you might see a message about a missing monitor specification, but this simply means that PsychoPy didn't find a 'cached' monitor configuration and is correctly using the monitor instance your script creates. In other words, don't worry about it.
+
+You can find an example .psyexp file with the code component and monitor settings described above inside the directory 'removeme_example_psyexp'.
+
 (the repo's 'psychopy_installation' folder and its contained 'python.exe' file aren't actually meant to be copied/used - their sole purpose is to show what the necessary directory structure looks like)
+
 
 .. _PsychoPy: https://psychopy.org/
 .. _PsychoPy forums: https://discourse.psychopy.org/t/is-it-possible-to-run-psychopy-from-a-usb-stick-on-a-windows-machine/5428
