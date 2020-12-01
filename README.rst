@@ -43,7 +43,8 @@ In PsychoPy Builder, the default is to rely on the 'Monitor Center' for storing 
 1. In your experiment's first routine, add a code component
 2. Open up the code component's 'Before Experiment' tab
 3. Add the following code snippet
-```py
+
+```python
 # import psychopy module for generating
 # monitor instances.
 from psychopy import monitors
@@ -59,6 +60,7 @@ example_mon = monitors.Monitor(
 # set pixel size (width x height) of monitor
 example_mon.setSizePix([1280, 1024])
 ```
+
 4. Edit the configurations in the snippet in accordance with the monitor of the computer that you will run the experiment on
 5. Save the code component's contents
 6. Open up your experiment's settings and go to the 'Screen' tab
